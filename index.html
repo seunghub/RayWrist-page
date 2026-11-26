@@ -1,0 +1,190 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#ffffff">
+  <meta name="description" content="RayWrist completes missing wrist tokens with geometry-guided features while keeping a pretrained vision-language-action model frozen.">
+  <meta property="og:title" content="RayWrist — Geometry-Guided Wrist-Token Completion">
+  <meta property="og:description" content="Adapt frozen vision-language-action models to missing wrist views. Explore policy rollouts on LIBERO, RoboTwin, RoboCasa, and a real bimanual robot.">
+  <meta property="og:type" content="website">
+  <meta property="og:image" content="https://seunghub.github.io/RayWrist-page/assets/images/teaser.png">
+  <meta property="og:url" content="https://seunghub.github.io/RayWrist-page/">
+  <meta name="twitter:card" content="summary_large_image">
+  <link rel="canonical" href="https://seunghub.github.io/RayWrist-page/">
+  <title>RayWrist · Geometry-Guided Wrist-Token Completion</title>
+  <link rel="icon" href="assets/images/ray.svg" type="image/svg+xml">
+  <link rel="preload" href="assets/fonts/Paperlogy-4Regular.ttf" as="font" type="font/ttf" crossorigin>
+  <link rel="stylesheet" href="style.css">
+  <script defer src="site-config.js"></script>
+  <script defer src="gallery.js"></script>
+  <script defer src="app.js"></script>
+  <script defer src="attention-data.js"></script>
+  <script defer src="attention.js"></script>
+  <script defer src="robocasa-data.js"></script>
+  <script defer src="task-results.js"></script>
+  <script defer src="showcase.js"></script>
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to content</a>
+  <header class="site-header">
+    <div class="nav-shell">
+      <a class="wordmark" href="#top" aria-label="RayWrist home"><img src="assets/images/ray.svg" width="27" height="27" alt="">RayWrist</a>
+      <button class="menu-toggle" aria-label="Open navigation" aria-expanded="false" aria-controls="site-nav"><span></span><span></span></button>
+      <nav id="site-nav" aria-label="Main navigation">
+        <a href="#overview">Overview</a><a href="#rollouts">Rollouts</a><a href="#method">Method</a><a href="#attention">Attention</a><a href="#efficiency">Efficiency</a><a href="#results">Results</a>
+      </nav>
+      <a class="nav-code" data-code-link href="https://github.com/seunghub/RayWrist" target="_blank" rel="noopener noreferrer">Code</a>
+    </div>
+  </header>
+
+  <main id="main">
+    <section class="hero page-width" id="top" aria-labelledby="paper-title">
+      <div class="hero-name"><img src="assets/images/ray.svg" width="56" height="56" alt=""><span>RayWrist</span></div>
+      <h1 id="paper-title">Geometry-Guided Wrist-Token Completion<br class="desktop-break"> for Frozen Vision-Language-Action Models</h1>
+      <div class="authors"><span>Seunghun Baek<sup>†</sup></span><span>Minjae Lee<sup>†</sup></span><span>Won Hwa Kim</span></div>
+      <p class="equal-contribution"><sup>†</sup> Equal contribution</p>
+      <div class="paper-links">
+        <a class="button button-paper" data-paper-link href="#citation" title="arXiv link coming soon"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 3h8l4 4v14H6zM14 3v5h4M9 12h6M9 16h6"/></svg><span>Paper</span><span class="soon">soon</span></a>
+        <a class="button button-primary" data-code-link href="https://github.com/seunghub/RayWrist" target="_blank" rel="noopener noreferrer"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m8 7-5 5 5 5m8-10 5 5-5 5m-3-14-2 18"/></svg>Code</a>
+        <a class="button" href="#citation"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 6h5v6H5v6m9-12h5v6h-5v6"/></svg>BibTeX</a>
+      </div>
+      <p class="hero-intro">Complete the missing wrist view <span>in feature space.</span></p>
+      <div class="overview-frame" id="overview">
+        <video id="overview-video" controls autoplay muted loop playsinline preload="metadata" poster="assets/posters/overview.jpg" aria-label="RayWrist overview video">
+          <source src="assets/videos/overview_longer.mp4" type="video/mp4">
+          Your browser does not support embedded video. <a href="assets/videos/overview_longer.mp4">Open the overview video.</a>
+        </video>
+        <div class="video-error" id="overview-error" hidden role="status">The video could not be loaded. <a href="assets/videos/overview_longer.mp4">Open the MP4 file.</a></div>
+      </div>
+      <div class="overview-caption"><span>Overview <span class="caption-divider">/</span> Geometry, feature completion, and policy rollouts</span><button id="sound-toggle" class="text-button" type="button" aria-pressed="false">Play with sound</button></div>
+    </section>
+
+    <section class="intro-section page-width" aria-labelledby="intro-title">
+      <div><p class="eyebrow">The idea</p><h2 id="intro-title">A missing wrist stream.<br>A reusable pretrained policy.</h2></div>
+      <div class="intro-copy"><p>RayWrist is a learned adapter for wrist views that may be unavailable at deployment. Robot-camera geometry selects a local crop from the retained external RGB image and organizes its features in a tool-frame grid.</p><p>A ray-based readout completes the policy’s native wrist features. During missing-view adaptation, only the adapters are trained; the visual encoder and recipient policy remain frozen.</p><div class="input-tags"><span>Retained RGB</span><span>Robot state</span><span>Calibration</span></div></div>
+    </section>
+
+    <div class="proof-strip page-width" aria-label="Missing-view adaptation highlights"><div><strong>0</strong><span>recipient weights changed<small>Missing-view adaptation</small></span></div><div><strong>&lt;1<span>%</span></strong><span>of native FT trainable weights<small>LIBERO · per wrist, both backbones</small></span></div><div><strong>33.7<span>%</span></strong><span>lower peak training memory<small>π₀.₅ · full RayWrist with alignment</small></span></div></div>
+
+    <section class="rollout-section section-pad" id="rollouts" aria-labelledby="rollout-title">
+      <div class="page-width">
+        <div class="section-heading"><div><p class="eyebrow">RayWrist in action</p><h2 id="rollout-title">From simulation to the real world</h2></div><p>Choose a benchmark, then a task.<br>Watch the observation and the reader’s tool-frame attention together.</p></div>
+        <div class="benchmark-tabs" role="tablist" aria-label="Select a benchmark">
+          <button id="tab-libero" class="benchmark-tab active" role="tab" aria-selected="true" aria-controls="benchmark-panel" data-benchmark="libero">LIBERO<span>3 videos</span></button>
+          <button id="tab-robotwin" class="benchmark-tab" role="tab" aria-selected="false" aria-controls="benchmark-panel" tabindex="-1" data-benchmark="robotwin">RoboTwin 2.0<span>3 videos</span></button>
+          <button id="tab-robocasa" class="benchmark-tab" role="tab" aria-selected="false" aria-controls="benchmark-panel" tabindex="-1" data-benchmark="robocasa">RoboCasa<span>3 videos</span></button>
+          <button id="tab-real" class="benchmark-tab" role="tab" aria-selected="false" aria-controls="benchmark-panel" tabindex="-1" data-benchmark="real">Real robot<span>3 videos</span></button>
+        </div>
+        <div id="benchmark-panel" class="benchmark-panel" role="tabpanel" aria-labelledby="tab-libero" tabindex="0">
+          <div class="benchmark-description"><span id="benchmark-subtitle">Single-wrist adaptation</span><p id="benchmark-description"></p></div>
+          <div class="gallery-player">
+            <div class="player-title"><div><span class="dataset-label" id="player-dataset">LIBERO</span><h3 id="clip-title">Bowl to drawer, then close</h3></div><span class="clip-kind" id="clip-kind">Excerpt</span></div>
+            <video id="rollout-video" controls muted loop playsinline preload="metadata" aria-labelledby="clip-title"></video>
+            <div class="video-error" id="rollout-error" hidden role="status">The video could not be loaded. <a id="error-video-link" href="#rollouts">Open the MP4 file.</a></div>
+            <div class="player-footer"><span id="clip-counter">1 of 3 <span class="caption-divider">/</span> 0:10</span><a id="open-video" href="#rollouts" target="_blank" rel="noopener">Open video</a></div>
+          </div>
+          <div class="clip-grid" id="clip-grid" aria-label="Task videos"></div>
+          <p class="gallery-note">Qualitative rollout visualizations. The evaluation results below use the fixed task sets and trial counts reported in the paper.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="robocasa-story section-pad page-width" id="robocasa" aria-labelledby="robocasa-title">
+      <div class="section-heading"><div><p class="eyebrow">RoboCasa · head-only joint learning</p><h2 id="robocasa-title">Place it.<br>Then close it.</h2></div><p>Two local readers follow the two tools through longer manipulation sequences. Head-camera RGB supplies the evidence; virtual wrist frames organize the readout.</p></div>
+      <div class="story-tabs" role="tablist" aria-label="RoboCasa task sequence"><button type="button" role="tab" id="story-tab-can" data-story="can" aria-selected="true" aria-controls="story-panel">Can to drawer</button><button type="button" role="tab" id="story-tab-milk" data-story="milk" aria-selected="false" tabindex="-1" aria-controls="story-panel">Milk to microwave</button><button type="button" role="tab" id="story-tab-wine" data-story="wine" aria-selected="false" tabindex="-1" aria-controls="story-panel">Wine to cabinet</button></div>
+      <div id="story-panel" role="tabpanel" aria-labelledby="story-tab-can" tabindex="0">
+        <div class="story-caption"><h3 id="story-subtitle">Place the can, then close the drawer.</h3><span>Selected frames from the task demo</span></div>
+        <div class="story-frames" id="story-frames"></div>
+        <div class="story-actions"><button class="text-button" id="story-watch" type="button">Watch this task</button><button class="text-button" id="story-inspect" type="button" title="Explore saved token examples from another episode of this task">More token examples</button><span>Same 30K-update budget as native FT · no wrist-image teacher</span></div>
+      </div>
+      <div class="robocasa-recipe-line"><span>Head RGB</span><span class="recipe-connector" aria-hidden="true"></span><span>Two tool-centered crops</span><span class="recipe-connector" aria-hidden="true"></span><span>Independent virtual-wrist readers</span><span class="recipe-connector" aria-hidden="true"></span><span>Joint action learning</span></div>
+    </section>
+
+    <section class="method-section section-pad page-width" id="method" aria-labelledby="method-title">
+      <div class="section-heading"><div><p class="eyebrow">The method</p><h2 id="method-title">From external RGB<br>to native wrist tokens</h2></div><p>Geometry exposes local evidence.<br>A learned adapter completes the missing features.</p></div>
+      <figure class="teaser-figure"><a href="assets/images/teaser.png" target="_blank" rel="noopener" aria-label="Open the RayWrist overview figure at full resolution"><img src="assets/images/teaser.png" width="2400" height="927" alt="RayWrist uses a tool-centered crop, a tool-frame feature grid, wrist-ray sampling, and native wrist-token prediction." loading="lazy"></a></figure>
+      <div class="method-steps">
+        <article><span class="step-line crop-line"></span><h3>Tool-centered crop</h3><p>Forward kinematics and camera calibration locate the physical tool origin in the external image.</p></article>
+        <article><span class="step-line grid-line"></span><h3>Tool-frame grid</h3><p>Early crop features are lifted into a local 3D feature grid and mixed with residual 3D convolutions.</p></article>
+        <article><span class="step-line ray-line"></span><h3>Wrist-ray readout</h3><p>Each contextual wrist query reads spatial candidates along its calibrated ray and a learned null token.</p></article>
+        <article><span class="step-line token-line"></span><h3>Native feature completion</h3><p>Learned writers fill the original wrist-feature slots. Retained views follow their native policy paths.</p></article>
+      </div>
+      <details class="architecture-details"><summary>Explore the adapter architecture</summary><div><img src="assets/images/framework.png" width="2600" height="727" loading="lazy" alt="Detailed RayWrist architecture showing contextual queries, tool-frame feature lifting, 3D convolutions, ray candidates, a learned null token, and native writers."></div></details>
+      <div class="joint-learning-note"><div class="note-symbol" aria-hidden="true"><img src="assets/images/ray.svg" width="30" height="30" alt=""></div><div><h3>Beyond camera-loss adaptation</h3><p>On RoboCasa, fixed virtual wrist frames and head-camera intrinsics define the query rays. Two independent readers and the native action fine-tuning scope are optimized together from the first update; vision and language stay frozen.</p></div><button class="text-button" data-show-benchmark="robocasa">Watch RoboCasa</button></div>
+    </section>
+
+    <section class="attention-section section-pad" id="attention" aria-labelledby="attention-title">
+      <div class="page-width">
+        <div class="section-heading"><div><p class="eyebrow">Inside the readout</p><h2 id="attention-title">Every token,<br>a different ray</h2></div><p>Follow a wrist-token position into the external crop and the local 3D grid. Inspect how its attention is shared between spatial candidates and null.</p></div>
+        <div class="attention-toolbar"><div class="attention-mode-switch" role="group" aria-label="Attention visualization mode"><button type="button" data-attention-mode="film" aria-pressed="true">Watch token sweep</button><button type="button" data-attention-mode="explore" aria-pressed="false">Explore tokens</button></div><span>Twelve recorded scenes · original attention values</span></div>
+        <div class="attention-stage">
+          <div class="attention-stage-heading"><div><span class="dataset-label" id="attention-scene-dataset">LIBERO</span><h3 id="attention-scene-title">Mug and microwave</h3></div><a id="attention-download" href="assets/attention/videos/mug-tokens.mp4" target="_blank" rel="noopener">Open animation</a></div>
+          <div id="attention-film"><video id="attention-video" controls muted loop playsinline preload="metadata" width="1600" height="900" poster="assets/attention/posters/mug.jpg" aria-label="Token-by-token ray attention in the selected recorded scene"></video></div>
+          <div id="attention-inspector" hidden>
+            <div class="token-controls"><div><strong id="token-query-label">q35 · row 4, column 3</strong><span id="token-count">8 × 8 lattice</span></div><label class="token-arm-label"><span class="sr-only">Wrist reader</span><select id="token-arm" aria-label="Wrist reader"></select></label><label class="token-number-label">Token <input id="token-number" type="number" min="0" max="63" value="35" inputmode="numeric"></label><input id="token-range" type="range" min="0" max="63" value="35" aria-label="Target token index"></div>
+            <div class="token-canvases">
+              <figure><figcaption><b id="token-wrist-title">Reference wrist</b> <span id="token-wrist-hint">Click a token</span></figcaption><canvas id="token-wrist" width="420" height="420" aria-label="Reference wrist image with the selected token cell"></canvas></figure>
+              <figure><figcaption><b id="token-external-title">External RGB</b> <span>Crop window</span></figcaption><canvas id="token-external" width="420" height="420" aria-label="Retained external image and tool-centered source crop window"></canvas></figure>
+              <figure><figcaption><b id="token-crop-title">Source crop</b> <span>Projected candidates</span></figcaption><canvas id="token-crop" width="420" height="420" aria-label="Sixteen projected ray candidates colored by original attention"></canvas></figure>
+              <figure><figcaption><b id="token-space-title">Tool-frame ray</b> <button type="button" id="token-reset">Reset view</button></figcaption><canvas id="token-space" width="420" height="420" aria-label="Draggable three-dimensional tool-frame ray and its sixteen weighted candidates"></canvas></figure>
+            </div>
+            <div class="token-readout"><div><div class="token-chart-label"><span id="token-status">16 spatial candidates + null</span><span>Probability</span></div><canvas id="token-weights" width="840" height="190" aria-label="Original attention probabilities for candidates one through sixteen and null"></canvas></div><div class="token-probabilities"><div><span>Null</span><strong id="token-null">0.8%</strong></div><div><span>Largest candidate</span><strong id="token-peak">17.7%</strong></div></div></div>
+            <p class="token-help">Choose any token with the slider or the reference wrist image. Drag the 3D view to rotate it; switch wrists for the bimanual scenes.</p>
+          </div>
+          <div id="attention-error" class="video-error" hidden role="status"></div>
+        </div>
+        <div class="attention-filters" role="group" aria-label="Attention scene dataset"><button type="button" data-attention-dataset="All" aria-pressed="true">All scenes <span>12</span></button><button type="button" data-attention-dataset="LIBERO" aria-pressed="false">LIBERO <span>6</span></button><button type="button" data-attention-dataset="RoboTwin" aria-pressed="false">RoboTwin <span>2</span></button><button type="button" data-attention-dataset="RoboCasa" aria-pressed="false">RoboCasa <span>4</span></button></div>
+        <div class="attention-scene-grid" id="attention-scenes" aria-label="Recorded attention scenes"></div>
+        <div class="attention-caption"><p><strong>Read a ray, keep the null.</strong> Marker area follows absolute candidate probability; color runs from blue (0) to gold (0.25 and above). The gray bar is the original null probability.</p><p>These animations sweep token positions within fixed observations; the rollout videos above show task execution. They reuse saved reader diagnostics on recorded trajectory observations. Reference wrist RGB locates LIBERO and RoboTwin tokens; RoboCasa shows the virtual query lattice, with no wrist-camera image.</p></div>
+        <span class="sr-only" id="token-live" role="status" aria-live="polite"></span>
+      </div>
+    </section>
+
+    <section class="efficiency-section section-pad page-width" id="efficiency" aria-labelledby="efficiency-title">
+      <div class="section-heading"><div><p class="eyebrow">Adaptation efficiency</p><h2 id="efficiency-title">Train a small adapter.<br>Keep the policy.</h2></div><p>Missing-view adaptation optimizes the wrist readers while preserving every recipient weight. The native visual and action interfaces stay in place.</p></div>
+      <div class="efficiency-grid">
+        <article class="efficiency-card parameter-card"><p class="metric-eyebrow">Trainable parameters · one wrist</p><h3>Less than 1% of native FT</h3><div class="parameter-comparisons">
+          <div class="parameter-comparison"><div class="parameter-label"><strong>π₀.₅</strong><span>0.41% of FT</span></div><div class="parameter-row"><span>Native FT</span><div class="scope-track"><i style="--scope:100%;--scope-color:#bac7d9"></i></div><span>3,353.43M</span></div><div class="parameter-row"><span>RayWrist</span><div class="scope-track"><i style="--scope:0.4099%;--scope-color:#3d6096"></i></div><span>13.75M</span></div></div>
+          <div class="parameter-comparison"><div class="parameter-label"><strong>GR00T N1.7</strong><span>0.93% of FT</span></div><div class="parameter-row"><span>Native FT</span><div class="scope-track"><i style="--scope:100%;--scope-color:#bac7d9"></i></div><span>1,620.52M</span></div><div class="parameter-row"><span>RayWrist</span><div class="scope-track"><i style="--scope:0.9259%;--scope-color:#3d6096"></i></div><span>15.01M</span></div></div>
+        </div><p class="efficiency-small">LIBERO single-wrist settings. The pretrained recipient remains loaded and frozen; only the adapter is optimized.</p></article>
+        <article class="efficiency-card memory-card"><p class="metric-eyebrow">Peak training memory · π₀.₅</p><div class="memory-headline"><h3>33.7<span>%</span></h3><p>less peak memory<br>per GPU</p></div><div class="memory-bars" role="img" aria-label="Native fine-tuning uses 35.15 GiB per GPU. RayWrist with conditioning alignment uses 23.29 GiB."><div class="memory-column"><div class="memory-pillar ft-pillar" style="--height:100%"><span>35.15</span></div><span>Native FT</span></div><div class="memory-column"><div class="memory-pillar ray-pillar" style="--height:66.2589%"><span>23.29</span></div><span>RayWrist</span></div><span class="memory-unit">GiB / GPU</span></div><div class="update-time"><span>Time per update</span><strong>6.85s <span class="time-separator">/</span> 7.30s</strong><span>FT / RayWrist · +6.6%</span></div></article>
+      </div>
+      <p class="efficiency-footnote">Training profile: LIBERO π₀.₅, four RTX PRO 6000 GPUs, batch 64 per GPU. These are the actual paper recipes: FP32 FT and a BF16 frozen recipient with FP32 adapters, AdamW, and EMA. Full RayWrist includes conditioning alignment; update timing excludes setup and I/O.</p>
+      <div class="latency-band"><div><p class="metric-eyebrow">Inference · batch one</p><h3>Modest added latency</h3></div><div class="latency-item"><span>π₀.₅</span><strong>+4.52<span>ms</span></strong><span>58.86 → 63.37ms · +7.67%</span></div><div class="latency-item"><span>GR00T N1.7</span><strong>+8.64<span>ms</span></strong><span>89.20 → 97.83ms · +9.68%</span></div><p>Median observation-to-action-chunk latency on LIBERO Long, including crop encoding and completion.</p></div>
+      <div class="reuse-benefits"><article><span class="reuse-symbol" aria-hidden="true">◇</span><h3>Preserve the recipient</h3><p>No recipient updates during missing-view adaptation.</p></article><article><span class="reuse-symbol" aria-hidden="true">▦</span><h3>Keep native feature slots</h3><p>Complete wrist tokens at the existing policy interface.</p></article><article><span class="reuse-symbol" aria-hidden="true">⊕</span><h3>Enable wrists independently</h3><p>Reuse the readers as views disappear; bypass them when views return.</p></article></div>
+    </section>
+
+    <section class="results-section section-pad" id="results" aria-labelledby="results-title">
+      <div class="page-width">
+        <div class="section-heading"><div><p class="eyebrow">Results</p><h2 id="results-title">Feature completion supports control</h2></div><p>Success rates from the paper’s fixed evaluations.<br>Native fine-tuning is the comparison in each panel.</p></div>
+        <div class="result-grid">
+          <article class="result-card"><div class="result-topline"><span>LIBERO</span><span>π₀.₅</span></div><h3>Frozen adaptation</h3><div class="result-value">92.85<span>%</span><span class="gain">+7.70 pp</span></div><div class="bar-pair" aria-label="Native FT 85.15 percent; RayWrist 92.85 percent"><div><span>Native FT</span><div class="bar-track"><span class="bar baseline" style="--value:85.15%"></span></div><span>85.15</span></div><div><span>RayWrist</span><div class="bar-track"><span class="bar ours" style="--value:92.85%"></span></div><span>92.85</span></div></div><p>Only the wrist adapters are optimized.</p></article>
+          <article class="result-card"><div class="result-topline"><span>LIBERO</span><span>GR00T N1.7</span></div><h3>Frozen adaptation</h3><div class="result-value">92.95<span>%</span><span class="gain">+5.15 pp</span></div><div class="bar-pair" aria-label="Native FT 87.80 percent; RayWrist 92.95 percent"><div><span>Native FT</span><div class="bar-track"><span class="bar baseline" style="--value:87.80%"></span></div><span>87.80</span></div><div><span>RayWrist</span><div class="bar-track"><span class="bar ours" style="--value:92.95%"></span></div><span>92.95</span></div></div><p>Native visual and action interfaces are retained.</p></article>
+          <article class="result-card joint-result"><div class="result-topline"><span>RoboCasa</span><span>GR00T N1.7</span></div><h3>Head-only joint learning</h3><div class="result-value">37.75<span>%</span><span class="gain">+4.92 pp</span></div><div class="bar-pair" aria-label="Native FT 32.83 percent; FT plus RayWrist 37.75 percent"><div><span>Native FT</span><div class="bar-track"><span class="bar baseline" style="--value:32.83%"></span></div><span>32.83</span></div><div><span>FT + ours</span><div class="bar-track"><span class="bar ours" style="--value:37.75%"></span></div><span>37.75</span></div></div><p>453 / 1,200 successful episodes across 24 tasks.</p></article>
+        </div>
+        <p class="results-note">LIBERO values average Spatial, Object, Goal, and Long, with 50 episodes per task. RoboCasa uses the same base checkpoint and 30K-update budget for both methods. <a href="assets/data/robocasa.csv" download>RoboCasa per-task results</a></p>
+        <details class="task-results-details" id="task-results"><summary><span>Explore RoboCasa task-by-task results</span><span>All 24 tasks</span></summary><div class="task-results-body"><div class="task-results-toolbar"><div class="task-filter" role="group" aria-label="RoboCasa task family"><button type="button" data-task-family="all" aria-pressed="true">All 24</button><button type="button" data-task-family="closure" aria-pressed="false">Placement and closure · 6</button><button type="button" data-task-family="placement" aria-pressed="false">Pick and place · 18</button></div><div class="task-chart-legend"><span><i class="legend-ft"></i>Native FT</span><span><i class="legend-ray"></i>FT + RayWrist</span></div></div><p class="task-results-caption">50 episodes per task and method · success-rate bars share the 0–100% scale.</p><div class="task-result-grid" id="task-result-grid"></div><a class="task-csv-link" href="assets/data/robocasa.csv" download>Download all task results</a></div></details>
+
+
+      </div>
+    </section>
+
+    <section class="citation-section section-pad page-width" id="citation" aria-labelledby="citation-title">
+      <div class="section-heading"><div><p class="eyebrow">Reference</p><h2 id="citation-title">Citation</h2></div><p>If RayWrist is useful for your research,<br>please cite our paper.</p></div>
+      <div class="citation-box"><div class="citation-top"><span>BibTeX</span><button id="copy-citation" class="text-button" type="button">Copy citation</button></div><pre><code id="bibtex">@misc{baek2026raywrist,
+  title         = {RayWrist: Geometry-Guided Wrist-Token Completion
+                   for Frozen Vision-Language-Action Models},
+  author        = {Baek, Seunghun and Lee, Minjae and Kim, Won Hwa},
+  year          = {2026},
+  archivePrefix = {arXiv},
+  eprint        = {XXXX.XXXXX},
+  url           = {https://arxiv.org/abs/XXXX.XXXXX}
+}</code></pre></div>
+      <p class="citation-note">The arXiv identifier will be updated when the preprint is released.</p><span class="sr-only" id="copy-status" role="status" aria-live="polite"></span>
+    </section>
+  </main>
+  <footer class="site-footer page-width"><a class="wordmark" href="#top"><img src="assets/images/ray.svg" width="25" height="25" alt="">RayWrist</a><span>Geometry-guided wrist-token completion.</span><a data-code-link href="https://github.com/seunghub/RayWrist" target="_blank" rel="noopener noreferrer">GitHub</a></footer>
+  <noscript><p class="noscript-note">Enable JavaScript to switch datasets. The overview video and method figures remain available.</p></noscript>
+</body>
+</html>
