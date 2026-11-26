@@ -93,6 +93,11 @@
   let activeDataset='All';
   function filterDataset(dataset,choose=true){activeDataset=dataset;document.querySelectorAll('[data-attention-dataset]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.attentionDataset===dataset)));document.querySelectorAll('.attention-scene').forEach((b,i)=>{b.hidden=dataset!=='All'&&scenes[i].dataset!==dataset;});if(choose&&dataset!=='All'&&scene().dataset!==dataset)selectScene(scenes.findIndex(f=>f.dataset===dataset));}
   document.querySelectorAll('[data-attention-dataset]').forEach(b=>b.addEventListener('click',()=>filterDataset(b.dataset.attentionDataset)));
+  // Derive labels from data so a browser-only update does not replace index.html.
+  const galleryCounts=Object.fromEntries(['LIBERO','RoboTwin','RoboCasa'].map(key=>[key,scenes.filter(f=>f.dataset===key).length]));
+  document.querySelectorAll('[data-attention-dataset]').forEach(button=>{const key=button.dataset.attentionDataset,count=key==='All'?scenes.length:(galleryCounts[key]??0);const label=button.querySelector('span');if(label)label.textContent=String(count);button.hidden=count===0;});
+  const galleryCaption=root.querySelector('.attention-toolbar>span');
+  if(galleryCaption)galleryCaption.textContent=`${scenes.length} recorded scenes · original attention values`;
   const deck=$('attention-scenes');
   scenes.forEach((f,i)=>{const b=document.createElement('button');b.type='button';b.className='attention-scene';b.setAttribute('aria-pressed',String(i===0));b.setAttribute('aria-label','Show '+f.title);const img=document.createElement('img');img.src=f.arms[f.defaultArm??0].cropImage??f.images.crop;img.alt='';img.loading='lazy';img.width=256;img.height=256;const label=document.createElement('span');label.className='attention-scene-copy';const name=document.createElement('span');name.textContent=f.title;const small=document.createElement('span');small.textContent=f.dataset+' · '+(f.arms.length===2?'two wrists':f.n*f.n+' tokens');label.append(name,small);b.append(img,label);b.addEventListener('click',()=>selectScene(i));deck.append(b);});
   document.querySelectorAll('[data-attention-mode]').forEach(b=>b.addEventListener('click',()=>setMode(b.dataset.attentionMode)));
