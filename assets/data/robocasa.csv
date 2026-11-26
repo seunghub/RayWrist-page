@@ -1,0 +1,25 @@
+task,label,family,episodes_per_method,FT_successes,RayWrist_successes,FT_SR,RayWrist_SR,delta_pp
+PnPBottleToCabinetClose,Bottle → Cabinet + close,Placement + fixture closure,50,10,4,20,8,-12
+PnPPotatoToMicrowaveClose,Potato → Microwave + close,Placement + fixture closure,50,1,5,2,10,8
+PosttrainPnPNovelFromCuttingboardToPanSplitA,Cutting board → Pan,Pick and place,50,35,34,70,68,-2
+PosttrainPnPNovelFromPlacematToBowlSplitA,Placemat → Bowl,Pick and place,50,14,20,28,40,12
+PosttrainPnPNovelFromPlateToCardboardboxSplitA,Plate → Cardboard box,Pick and place,50,21,17,42,34,-8
+PosttrainPnPNovelFromTrayToPlateSplitA,Tray → Plate,Pick and place,50,27,30,54,60,6
+PnPCanToDrawerClose,Can → Drawer + close,Placement + fixture closure,50,1,39,2,78,76
+PnPWineToCabinetClose,Wine → Cabinet + close,Placement + fixture closure,50,2,9,4,18,14
+PosttrainPnPNovelFromCuttingboardToPotSplitA,Cutting board → Pot,Pick and place,50,28,31,56,62,6
+PosttrainPnPNovelFromPlacematToPlateSplitA,Placemat → Plate,Pick and place,50,19,21,38,42,4
+PosttrainPnPNovelFromPlateToPanSplitA,Plate → Pan,Pick and place,50,18,14,36,28,-8
+PosttrainPnPNovelFromTrayToPotSplitA,Tray → Pot,Pick and place,50,32,27,64,54,-10
+PnPCupToDrawerClose,Cup → Drawer + close,Placement + fixture closure,50,0,14,0,28,28
+PosttrainPnPNovelFromCuttingboardToBasketSplitA,Cutting board → Basket,Pick and place,50,24,33,48,66,18
+PosttrainPnPNovelFromCuttingboardToTieredbasketSplitA,Cutting board → Tiered basket,Pick and place,50,15,12,30,24,-6
+PosttrainPnPNovelFromPlacematToTieredshelfSplitA,Placemat → Tiered shelf,Pick and place,50,9,7,18,14,-4
+PosttrainPnPNovelFromPlateToPlateSplitA,Plate → Plate,Pick and place,50,32,27,64,54,-10
+PosttrainPnPNovelFromTrayToTieredbasketSplitA,Tray → Tiered basket,Pick and place,50,17,16,34,32,-2
+PnPMilkToMicrowaveClose,Milk → Microwave + close,Placement + fixture closure,50,8,4,16,8,-8
+PosttrainPnPNovelFromCuttingboardToCardboardboxSplitA,Cutting board → Cardboard box,Pick and place,50,12,11,24,22,-2
+PosttrainPnPNovelFromPlacematToBasketSplitA,Placemat → Basket,Pick and place,50,25,23,50,46,-4
+PosttrainPnPNovelFromPlateToBowlSplitA,Plate → Bowl,Pick and place,50,9,18,18,36,18
+PosttrainPnPNovelFromTrayToCardboardboxSplitA,Tray → Cardboard box,Pick and place,50,23,29,46,58,12
+PosttrainPnPNovelFromTrayToTieredshelfSplitA,Tray → Tiered shelf,Pick and place,50,12,8,24,16,-8
